@@ -1,11 +1,33 @@
+image: node:latest
+
 stages:
   - build
+  - test
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
 
 build:
   stage: build
-  image: node:latest
   script:
-    - echo " Building project "
-    - pnpm ci
-    - pnpm run build
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - .next/
 
+test:
+  stage: test
+  script:
+    - npm test
+
+deploy:
+  stage: deploy
+  script:
+    - npm run start
+  environment:
+    name: production
+  only:
+    - master
