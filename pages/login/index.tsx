@@ -37,9 +37,6 @@ export default function Home() {
         <main>
             <div className='flex flex-col items-center pt-40 gap-5'>
                 <img src='/logo2.svg' alt='logo' width={200} height={200} />
-                <p>
-                    Logged in: {pocketbase.authStore.isValid.toString()}
-                </p>
                 <Box
                 component="form"
                 noValidate

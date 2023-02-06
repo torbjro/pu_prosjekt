@@ -9,4 +9,21 @@ export async function authAndReturnUser(username: string, password: string) {
     return user;
 }
 
+export async function registerAndReturnUser(username: string, password: string, passwordConfirm: string) {
+    const user = await pocketbase.collection('users').create({ 
+        password: password, 
+        passwordConfirm: passwordConfirm,
+        username: username
+    });
+    return user;
+}
+
+export async function logout() {
+    pocketbase.authStore.clear();
+}
+
+export async function getUser() {
+    return pocketbase.authStore.model;
+}
+
 
