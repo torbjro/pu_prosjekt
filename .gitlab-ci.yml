@@ -8,6 +8,4 @@ build:
     - echo " Building project "
     - npm ci
     - npm run build
-  only: 
-    - merge_requests
 
