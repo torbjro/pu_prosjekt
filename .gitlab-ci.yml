@@ -6,6 +6,6 @@ build:
   image: node:latest
   script:
     - echo " Building project "
-    - npm ci
-    - npm run build
+    - pnpm ci
+    - pnpm run build
 
