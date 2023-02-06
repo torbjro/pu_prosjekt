@@ -17,17 +17,3 @@ build:
   artifacts:
     paths:
       - .next/
-
-test:
-  stage: test
-  script:
-    - npm test
-
-deploy:
-  stage: deploy
-  script:
-    - npm run start
-  environment:
-    name: production
-  only:
-    - master
