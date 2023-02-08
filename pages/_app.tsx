@@ -11,24 +11,14 @@ export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
 
     useEffect(() => {
-        if (!isAuthenticated()) {
-          router.push('/login');
+        if (router.pathname !== '/login') {
+            if (!pocketbase.authStore.isValid) {
+                router.push('/login');
+            }
         }
-      }, 
-    []);
-
-    const isAuthenticated = () => {
-        const user = pocketbase.authStore.isValid; // TODO: change with async connects.ts
-        if (user) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    }, [router.pathname]);
+    
     return (
-        <>
-            {isAuthenticated() ? <Component {...pageProps} /> : <Login />}
-        </>
+        <Component {...pageProps} />
     )
 }

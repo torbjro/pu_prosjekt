@@ -7,12 +7,14 @@ import { authAndReturnUser } from '../api/connects'
 
 export default function Login() {
 
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
+
     const router = useRouter()
 
-    const login = async () => {
+    async function login() {
         try {
             const user = await authAndReturnUser(username, password)
             console.log(user)
