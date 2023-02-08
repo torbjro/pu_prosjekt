@@ -18,6 +18,10 @@ export async function registerAndReturnUser(username: string, password: string, 
     return user;
 }
 
+export async function isAuthenticated() {
+    return pocketbase.authStore.isValid;
+}
+
 export async function logout() {
     pocketbase.authStore.clear();
 }

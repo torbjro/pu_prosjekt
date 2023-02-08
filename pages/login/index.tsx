@@ -5,10 +5,7 @@ import { useRouter } from 'next/router'
 //import from connects.ts in api folder
 import { authAndReturnUser } from '../api/connects'
 
-
-import { pocketbase } from '../api/connects'
-
-export default function Home() {
+export default function Login() {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -25,6 +22,7 @@ export default function Home() {
             console.log(error)
         }
     }
+
 
     return (
         <>
