@@ -1,7 +1,8 @@
 
+import { pocketbase } from '../api/connects';
+
 
 function Dashboard() {
-
   return (
     <div>
       <h1>Dashboard</h1>

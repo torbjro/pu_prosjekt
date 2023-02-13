@@ -62,4 +62,16 @@ export async function deletePost(postId: string) {
     await pocketbase.collection('posts').delete(postId);
 }
 
+export async function isAuthenticated() {
+    return pocketbase.authStore.isValid;
+}
+
+export async function logout() {
+    pocketbase.authStore.clear();
+}
+
+export async function getUser() {
+    return pocketbase.authStore.model;
+}
+
 
