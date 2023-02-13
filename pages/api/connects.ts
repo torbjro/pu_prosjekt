@@ -32,7 +32,7 @@ export async function deleteUser(userId: string) {
     await pocketbase.collection('users').delete(userId);
 }
 
-export async function createProgram(userId: string, exercises: string, name: string) {
+export async function createProgram(userId: string, exercises: string[], name: string) {
     const data = {
         "name": name,
         "user": [
@@ -60,6 +60,19 @@ export async function createPost(caption: string, programId: string, userId: str
 
 export async function deletePost(postId: string) {
     await pocketbase.collection('posts').delete(postId);
+}
+
+export async function createExercise(exercise:string, sets:number, reps:number) {
+    const data = {
+        "exercise": exercise,
+        "sets": sets,
+        "reps": reps
+    };
+    const newExercise = await pocketbase.collection('exercises').create(data);
+}
+
+export async function deleteExercise(exerciseId: string) {
+    await pocketbase.collection('exercises').delete(exerciseId);
 }
 
 export async function isAuthenticated() {

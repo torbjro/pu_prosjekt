@@ -9,7 +9,7 @@ import { getName, getUserId, pocketbase } from '../api/connects';
 
 export default function Dashboard() {
   const [userId, setUserId] = useState('')
-  const [exercises, setExercises] = useState('')
+  const [exercises, setExercises] = useState([])
   const [name, setName] = useState('')
 
   const router = useRouter()
