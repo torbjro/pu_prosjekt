@@ -15,7 +15,7 @@ export default function Register() {
 
   const router = useRouter()
 
-  const register = async () => {
+  async function register() {
       try {
           const user = await registerUser(username, email, password, passwordConfirm, name)
           console.log(user)
@@ -54,14 +54,14 @@ export default function Register() {
                   />
                   <TextField
                       id="name-input"
-                      label="name"
+                      label="Name"
                       type="name"
                       autoComplete="current-password"
                       onChange={(e) => setName(e.target.value)}
                   />
                   <TextField
                       id="email-input"
-                      label="email"
+                      label="E-mail"
                       type="email"
                       autoComplete="current-password"
                       onChange={(e) => setEmail(e.target.value)}
