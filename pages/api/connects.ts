@@ -18,7 +18,7 @@ export async function registerUser(username: string, email: string, password: st
         "passwordConfim": JSON.stringify(passwordConfirm),
         "name": JSON.stringify(name),
         "posts": [
-            
+
         ],
         "programs": [
 
@@ -32,7 +32,7 @@ export async function deleteUser(userId: string) {
     await pocketbase.collection('users').delete(userId);
 }
 
-export async function createProgram(userId:string, exercises:string, name:string) {
+export async function createProgram(userId: string, exercises: string, name: string) {
     const data = {
         "name": JSON.stringify(name),
         "user": [
@@ -48,7 +48,7 @@ export async function deleteProgram(programId: string) {
     await pocketbase.collection('programs').delete(programId);
 }
 
-export async function createPost(caption: string, programId: string, userId: string){
+export async function createPost(caption: string, programId: string, userId: string) {
     const data = {
         "caption": JSON.stringify(caption),
         "program": JSON.stringify(programId),
