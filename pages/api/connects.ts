@@ -74,4 +74,22 @@ export async function getUser() {
     return pocketbase.authStore.model;
 }
 
+export async function getUserId() {
+    if (currentUser != null) {
+        return currentUser.id;
+    }
+    else {
+        console.log("currentUser is null");
+    }
+}
+
+export async function getName() {
+    if (currentUser != null) {
+        return currentUser.name;
+    }
+    else {
+        console.log("currentUser is null");
+    }
+}
+
 

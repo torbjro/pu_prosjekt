@@ -1,5 +1,5 @@
 
-import { pocketbase } from '../api/connects';
+import { getName, getUserId, pocketbase } from '../api/connects';
 
 
 function Dashboard() {
