@@ -77,7 +77,7 @@ export default function Register() {
                   <TextField
                       id="confirmPassword-input"
                       label="Confirm Password"
-                      type="confirmPassword"
+                      type="password"
                       autoComplete="current-password"
                       onChange={(e) => setConfirmPassword(e.target.value)}
 
