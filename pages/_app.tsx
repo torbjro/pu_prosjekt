@@ -15,6 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
             if (!pocketbase.authStore.isValid) {
                 router.push('/login');
             }
+            else {
+                router.push('/dashboard');
+            }
         }
     }, [router.pathname]);
     

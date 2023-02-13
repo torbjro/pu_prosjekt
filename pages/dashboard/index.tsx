@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Head from 'next/head'
 import { Box, Button, TextField } from '@mui/material'
 import { useState } from 'react'
@@ -5,6 +6,10 @@ import { useRouter } from 'next/router'
 import { createProgram } from '../api/connects'
 import { use } from 'react';
 import { pocketbase } from '../api/connects';
+=======
+
+import { getName, getUserId, pocketbase } from '../api/connects';
+>>>>>>> 2d43414d39bb161a8032094bbd338b100791fa97
 
 
 export default function Dashboard() {

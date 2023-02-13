@@ -11,12 +11,12 @@ export async function authAndReturnUser(username: string, password: string) {
 
 export async function registerUser(username: string, email: string, password: string, passwordConfirm: string, name: string) {
     const data = {
-        "username": JSON.stringify(username),
-        "email": JSON.stringify(email),
-        "emailvisibility": "true",
-        "password": JSON.stringify(password),
-        "passwordConfim": JSON.stringify(passwordConfirm),
-        "name": JSON.stringify(name),
+        "username": username,
+        "email": email,
+        "emailVisibility": true,
+        "password": password,
+        "passwordConfim": passwordConfirm,
+        "name": name,
         "posts": [
 
         ],
@@ -34,11 +34,11 @@ export async function deleteUser(userId: string) {
 
 export async function createProgram(userId: string, exercises: string, name: string) {
     const data = {
-        "name": JSON.stringify(name),
+        "name": name,
         "user": [
-            JSON.stringify(userId)
+            userId
         ],
-        "exercises": JSON.stringify(exercises)
+        "exercises": exercises
     };
     const program = await pocketbase.collection('programs').create(data);
     return program;
@@ -50,9 +50,9 @@ export async function deleteProgram(programId: string) {
 
 export async function createPost(caption: string, programId: string, userId: string) {
     const data = {
-        "caption": JSON.stringify(caption),
-        "program": JSON.stringify(programId),
-        "user": JSON.stringify(userId)
+        "caption": caption,
+        "program": programId,
+        "user": userId
     };
     const post = await pocketbase.collection('posts').create(data);
     return post;
@@ -72,6 +72,24 @@ export async function logout() {
 
 export async function getUser() {
     return pocketbase.authStore.model;
+}
+
+export async function getUserId() {
+    if (currentUser != null) {
+        return currentUser.id;
+    }
+    else {
+        console.log("currentUser is null");
+    }
+}
+
+export async function getName() {
+    if (currentUser != null) {
+        return currentUser.name;
+    }
+    else {
+        console.log("currentUser is null");
+    }
 }
 
 
