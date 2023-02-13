@@ -3,6 +3,7 @@ import { Box, Button, TextField } from '@mui/material'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 //import from connects.ts in api folder
+import { registerUser } from '../api/connects'
 
 export default function Register() {
 
