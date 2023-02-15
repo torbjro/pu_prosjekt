@@ -7,6 +7,7 @@ module.exports = {
       '@storybook/addon-essentials',
       '@storybook/addon-interactions',
       'storybook-css-modules-preset',
+      '@chakra-ui/storybook-addon',
       {
         /**
          * Fix Storybook issue with PostCSS@8
@@ -21,6 +22,17 @@ module.exports = {
       },
     ],
     framework: '@storybook/react',
+    features: {
+        emotionAlias: false,
+    },
+    webpackFinal: async (config) => {
+        config.module.rules.push({
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto',
+        })
+        return config
+      },
     core: {
       builder: '@storybook/builder-webpack5',
     },

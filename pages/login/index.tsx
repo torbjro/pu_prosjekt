@@ -5,17 +5,16 @@ import { useRouter } from 'next/router'
 //import from connects.ts in api folder
 import { authAndReturnUser } from '../api/connects'
 
+export default function Login() {
 
-import { pocketbase } from '../api/connects'
-
-export default function Home() {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
+
     const router = useRouter()
 
-    const login = async () => {
+    async function login() {
         try {
             const user = await authAndReturnUser(username, password)
             console.log(user)
@@ -25,6 +24,7 @@ export default function Home() {
             console.log(error)
         }
     }
+
 
     return (
         <>
@@ -37,9 +37,6 @@ export default function Home() {
         <main>
             <div className='flex flex-col items-center pt-40 gap-5'>
                 <img src='/logo2.svg' alt='logo' width={200} height={200} />
-                <p>
-                    Logged in: {pocketbase.authStore.isValid.toString()}
-                </p>
                 <Box
                 component="form"
                 noValidate
