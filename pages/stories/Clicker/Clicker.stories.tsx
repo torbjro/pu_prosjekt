@@ -1,7 +1,10 @@
 import Clicker from './Clicker'
 
-export const generated = () => {
-  return <Clicker />
+export default {
+  title: 'Clicker', 
+  component: Clicker
 }
 
-export default { title: 'Clicker' }
+export const Default = () => {
+    return <Clicker>Register</Clicker>
+}
