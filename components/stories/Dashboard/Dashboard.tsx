@@ -25,22 +25,22 @@ const user = {
 }
 const navigation = [
   { name: 'Home', href: '#', current: true },
+  { name: 'Groups', href: '#', current: false },
+  { name: 'Friends', href: '#', current: false },
+  { name: 'Your pictures', href: '#', current: false },
   { name: 'Profile', href: '#', current: false },
-  { name: 'Resources', href: '#', current: false },
-  { name: 'Company Directory', href: '#', current: false },
-  { name: 'Openings', href: '#', current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Sign out', href: './login' },
 ]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Dashboard() {
   return (
     <>
       {/*
@@ -52,7 +52,7 @@ export default function Example() {
         ```
       */}
       <div className="min-h-full">
-        <Popover as="header" className="bg-indigo-600 pb-24">
+        <Popover as="header" className="bg-violet-600 pb-24">
           {({ open }) => (
             <>
               <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -60,11 +60,11 @@ export default function Example() {
                   {/* Logo */}
                   <div className="absolute left-0 flex-shrink-0 lg:static">
                     <a href="#">
-                      <span className="sr-only">Your Company</span>
+                      <span className="sr-only">MuscleMates</span>
                       <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
-                        alt="Your Company"
+                        src="./logo2.svg"
+                        alt="MuscleMates"
                       />
                     </a>
                   </div>
@@ -72,11 +72,11 @@ export default function Example() {
                   {/* Right section on desktop */}
                   <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
                     <button
-                      type="button"
+                      type="button"s
                       className="flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                     >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
+                      <span>Log out</span>
+                    {/*on click log out!*/}
                     </button>
 
                     {/* Profile dropdown */}
@@ -223,8 +223,8 @@ export default function Example() {
                             <div>
                               <img
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                alt="Your Company"
+                                src="./logo2.svg"
+                                alt="MuscleMates"
                               />
                             </div>
                             <div className="-mr-2">
@@ -239,31 +239,31 @@ export default function Example() {
                               href="#"
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              Home
+                              <span>Home</span>
                             </a>
                             <a
                               href="#"
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              Profile
+                              <span>Profile</span>
                             </a>
                             <a
                               href="#"
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              Resources
+                              <span>Groups</span>
                             </a>
                             <a
                               href="#"
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              Company Directory
+                              Your pictures
                             </a>
                             <a
                               href="#"
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              Openings
+                              Friends
                             </a>
                           </div>
                         </div>
@@ -316,7 +316,7 @@ export default function Example() {
                     Section title
                   </h2>
                   <div className="overflow-hidden rounded-lg bg-white shadow">
-                    <div className="p-6">{/* Your content */}</div>
+                    <div className="p-6">The feed can be shown here</div>
                   </div>
                 </section>
               </div>
@@ -328,7 +328,7 @@ export default function Example() {
                     Section title
                   </h2>
                   <div className="overflow-hidden rounded-lg bg-white shadow">
-                    <div className="p-6">{/* Your content */}</div>
+                    <div className="p-6">Display groups or something here</div>
                   </div>
                 </section>
               </div>
