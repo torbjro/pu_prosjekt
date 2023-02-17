@@ -6,12 +6,8 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Router from 'next/router';
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+//const user = pocketbase.authStore.model;
+
 const navigation = [
   { name: 'Home', href: '#', current: true },
   { name: 'Groups', href: '#', current: false },
@@ -19,9 +15,12 @@ const navigation = [
   { name: 'Your pictures', href: '#', current: false },
   { name: 'Profile', href: '#', current: false },
 ]
+
+// have to add links here as the pages are added to our website
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
+  // add logic for logging out here, or just remove it since we already have a login button?
   { name: 'Sign out', href: './login' },
 ]
 
@@ -67,6 +66,16 @@ function Dashboard() {
 
                   {/* Right section on desktop */}
                   <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
+                    {/* New Program button */}
+                    {/* add onClick!! */}
+                    <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-black shadow-sm hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                      New Program
+                    </button>
+                    {/* Log out button */}
                     <button
                       type="button"
                       className="flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
@@ -80,7 +89,7 @@ function Dashboard() {
                       <div>
                         <Menu.Button className="flex rounded-full bg-white text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
                           <span className="sr-only">Open user menu</span>
-                          <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                          <img className="h-8 w-8 rounded-full" src="./userIcon.svg" alt="" />
                         </Menu.Button>
                       </div>
                       <Transition
@@ -266,11 +275,11 @@ function Dashboard() {
                         <div className="pt-4 pb-2">
                           <div className="flex items-center px-5">
                             <div className="flex-shrink-0">
-                              <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                              <img className="h-10 w-10 rounded-full" src="./userIcon.svg" alt="" />
                             </div>
                             <div className="ml-3 min-w-0 flex-1">
-                              <div className="truncate text-base font-medium text-gray-800">{user.name}</div>
-                              <div className="truncate text-sm font-medium text-gray-500">{user.email}</div>
+                              <div className="truncate text-base font-medium text-gray-800">{pocketbase.authStore.model?.name}</div>
+                              <div className="truncate text-sm font-medium text-gray-500">{pocketbase.authStore.model?.email}</div>
                             </div>
                             <button
                               type="button"
