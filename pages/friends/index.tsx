@@ -315,7 +315,6 @@ export default function Friends() {
           </div>
         </footer>
       </div>
-      
     </form>
   )
 }
