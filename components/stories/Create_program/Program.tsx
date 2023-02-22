@@ -1,3 +1,5 @@
+import { pocketbase } from '@/pages/api/connects';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 interface Row {
@@ -5,6 +7,10 @@ interface Row {
   Sets: number;
   Reps: number;
 }
+
+const router = useRouter();
+
+const user = pocketbase.authStore.model?.id;
 
 function Program() {
   const [rows, setRows] = useState<Row[]>([{ Exercise: '', Sets: 0, Reps: 0}]);
@@ -36,12 +42,43 @@ function Program() {
     setIsPublic(!isPublic);
   };
 
-  const handleSave = () => {
-    // handle form submission here
+  const handleSave = async () => {
+    // creating exercises
+    let exercises = [];
+    for (var exercise of rows) {
+        const exerciseData = {
+            "exercise": exercise.Exercise,
+            "sets": exercise.Sets,
+            "reps": exercise.Reps
+        };
+        const exerciseRecord = await pocketbase.collection('exercises').create(exerciseData);
+        exercises.push(exerciseRecord.id);
+    }
+    // creating program
+    const programData = {
+        "name": "MyProgram",
+        "user": [
+            user
+        ],
+        "exercises": exercises
+    };
+    const programRecord = await pocketbase.collection('programs').create(programData);
+    // creating post
+    const postData = {
+        "caption": "My Program",
+        "program": programRecord.id,
+        "user": user,
+        "public": isPublic
+    };
+    const postRecord = await pocketbase.collection('posts').create(postData);
+
+    // push back to dashboard
+    router.push('/dashboard');
   };
 
   const handleCancel = () => {
-    // handle form cancellation here
+    // send back to dashboard
+    router.push('/dashboard');
   };
 
   return (

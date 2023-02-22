@@ -34,6 +34,10 @@ function logOut() {
   console.log("logged out");
 }
 
+function newProgram() {
+  Router.push('/create_post');
+}
+
 
 function Dashboard() {
   return (
@@ -69,6 +73,7 @@ function Dashboard() {
                     {/* New Program button */}
                     {/* add onClick!! */}
                     <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-black shadow-sm hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      onClick={() => newProgram()}
                     >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
