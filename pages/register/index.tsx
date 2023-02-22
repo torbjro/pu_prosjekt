@@ -91,3 +91,11 @@ export default function Register() {
       </>
   )
 }
+export async function getFriends() {
+    pocketbase.autoCancellation(false);
+    const user = pocketbase.authStore.model;
+    const friends = await pocketbase.collection('users').getList(1, 20, {
+        filter: 'users.friends.id == ' + user?.id
+    });
+    return friends;
+}

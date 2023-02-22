@@ -5,13 +5,14 @@ import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Router from 'next/router';
+import { Button } from '@chakra-ui/react';
 
 //const user = pocketbase.authStore.model;
 
 const navigation = [
   { name: 'Home', href: '#', current: true },
   { name: 'Groups', href: '#', current: false },
-  { name: 'Friends', href: '#', current: false },
+  { name: 'Friends', href: '/friends', current: false },
   { name: 'Your pictures', href: '#', current: false },
   { name: 'Profile', href: '#', current: false },
 ]
@@ -36,6 +37,11 @@ function logOut() {
 
 function newProgram() {
   Router.push('/create_post');
+}
+
+const friendsPage = () => {
+  Router.push("/friends");
+
 }
 
 
@@ -269,12 +275,12 @@ function Dashboard() {
                             >
                               Your pictures
                             </a>
-                            <a
-                              href="#"
+                            <button
+                              onClick={friendsPage}
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
                               Friends
-                            </a>
+                            </button>
                           </div>
                         </div>
                         <div className="pt-4 pb-2">

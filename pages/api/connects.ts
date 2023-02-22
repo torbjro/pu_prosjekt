@@ -62,7 +62,7 @@ export async function deletePost(postId: string) {
     await pocketbase.collection('posts').delete(postId);
 }
 
-export async function createExercise(exercise:string, sets:number, reps:number) {
+export async function createExercise(exercise: string, sets: number, reps: number) {
     const data = {
         "exercise": exercise,
         "sets": sets,
@@ -106,3 +106,12 @@ export async function getName() {
 }
 
 
+export async function getFriends() {
+    pocketbase.autoCancellation(false);
+    //const user = pocketbase.authStore.model;
+    //const friends = await pocketbase.collection('users').getList(1, 20, {
+    //    filter: 'users.friends.id == ' + user?.id
+    //});
+    const friends = pocketbase.authStore.model?.friends;
+    return friends;
+}
