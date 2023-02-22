@@ -11,14 +11,14 @@ export async function authAndReturnUser(username: string, password: string) {
 
 export async function registerUser(username: string, email: string, password: string, passwordConfirm: string, name: string) {
     const data = {
-        "username": JSON.stringify(username),
-        "email": JSON.stringify(email),
-        "emailvisibility": "true",
-        "password": JSON.stringify(password),
-        "passwordConfim": JSON.stringify(passwordConfirm),
-        "name": JSON.stringify(name),
+        "username": username,
+        "email": email,
+        "emailVisibility": true,
+        "password": password,
+        "passwordConfim": passwordConfirm,
+        "name": name,
         "posts": [
-            
+
         ],
         "programs": [
 
@@ -32,13 +32,13 @@ export async function deleteUser(userId: string) {
     await pocketbase.collection('users').delete(userId);
 }
 
-export async function createProgram(userId:string, exercises:string, name:string) {
+export async function createProgram(userId: string, exercises: string[], name: string) {
     const data = {
-        "name": JSON.stringify(name),
+        "name": name,
         "user": [
-            JSON.stringify(userId)
+            userId
         ],
-        "exercises": JSON.stringify(exercises)
+        "exercises": exercises
     };
     const program = await pocketbase.collection('programs').create(data);
     return program;
@@ -48,11 +48,11 @@ export async function deleteProgram(programId: string) {
     await pocketbase.collection('programs').delete(programId);
 }
 
-export async function createPost(caption: string, programId: string, userId: string){
+export async function createPost(caption: string, programId: string, userId: string) {
     const data = {
-        "caption": JSON.stringify(caption),
-        "program": JSON.stringify(programId),
-        "user": JSON.stringify(userId)
+        "caption": caption,
+        "program": programId,
+        "user": userId
     };
     const post = await pocketbase.collection('posts').create(data);
     return post;
@@ -60,6 +60,19 @@ export async function createPost(caption: string, programId: string, userId: str
 
 export async function deletePost(postId: string) {
     await pocketbase.collection('posts').delete(postId);
+}
+
+export async function createExercise(exercise:string, sets:number, reps:number) {
+    const data = {
+        "exercise": exercise,
+        "sets": sets,
+        "reps": reps
+    };
+    const newExercise = await pocketbase.collection('exercises').create(data);
+}
+
+export async function deleteExercise(exerciseId: string) {
+    await pocketbase.collection('exercises').delete(exerciseId);
 }
 
 export async function isAuthenticated() {
@@ -72,6 +85,24 @@ export async function logout() {
 
 export async function getUser() {
     return pocketbase.authStore.model;
+}
+
+export async function getUserId() {
+    if (currentUser != null) {
+        return currentUser.id;
+    }
+    else {
+        console.log("currentUser is null");
+    }
+}
+
+export async function getName() {
+    if (currentUser != null) {
+        return currentUser.name;
+    }
+    else {
+        console.log("currentUser is null");
+    }
 }
 
 
