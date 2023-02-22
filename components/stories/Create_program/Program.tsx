@@ -8,7 +8,7 @@ interface Row {
   Reps: number;
 }
 
-const router = useRouter();
+//const router = useRouter();
 
 const user = pocketbase.authStore.model?.id;
 
@@ -73,12 +73,12 @@ function Program() {
     const postRecord = await pocketbase.collection('posts').create(postData);
 
     // push back to dashboard
-    router.push('/dashboard');
+    // router.push('/dashboard');
   };
 
   const handleCancel = () => {
     // send back to dashboard
-    router.push('/dashboard');
+    // router.push('/dashboard');
   };
 
   return (
