@@ -1,4 +1,4 @@
-import Pocketbase from "pocketbase"
+import Pocketbase, { Record } from "pocketbase"
 
 export const pocketbase = new Pocketbase("http://127.0.0.1:8090");
 
@@ -15,16 +15,20 @@ export async function registerUser(username: string, email: string, password: st
         "email": email,
         "emailVisibility": true,
         "password": password,
-        "passwordConfim": passwordConfirm,
+        "passwordConfirm": passwordConfirm,
         "name": name,
         "posts": [
 
         ],
         "programs": [
 
+        ],
+        "friends": [
+
         ]
     };
     const newUser = await pocketbase.collection('users').create(data);
+    const user1 = await authAndReturnUser(username, password);
     return newUser;
 }
 
@@ -62,7 +66,7 @@ export async function deletePost(postId: string) {
     await pocketbase.collection('posts').delete(postId);
 }
 
-export async function createExercise(exercise:string, sets:number, reps:number) {
+export async function createExercise(exercise: string, sets: number, reps: number) {
     const data = {
         "exercise": exercise,
         "sets": sets,
@@ -83,7 +87,7 @@ export async function logout() {
     pocketbase.authStore.clear();
 }
 
-export async function getUser() {
+export function getUser() {
     return pocketbase.authStore.model;
 }
 
@@ -105,4 +109,11 @@ export async function getName() {
     }
 }
 
-
+export async function getFriends() {
+    pocketbase.autoCancellation(false);
+    const user = pocketbase.authStore.model;
+    const friends = await pocketbase.collection('users').getList(1, 20, {
+        filter: 'users.friends.id == ' + user?.id
+    });
+    return friends;
+}

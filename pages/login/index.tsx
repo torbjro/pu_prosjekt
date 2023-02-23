@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 //import from connects.ts in api folder
 import { authAndReturnUser } from '../api/connects'
+import Link from 'next/link'
 
 export default function Login() {
 
@@ -35,16 +36,32 @@ export default function Login() {
             <link rel="icon" href="/favicon.ico" />
         </Head>
         <main>
-            <div className='flex flex-col items-center pt-40 gap-5'>
-                <img src='/logo2.svg' alt='logo' width={200} height={200} />
+            <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-md space-y-8">
+                <img 
+                    src='/logo2.svg' 
+                    className="mx-auto h-18 w-auto"
+                 />
+                <div>
+                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                        Login in to your account
+                    </h2>
+                    <p className="mt-2 text-center text-sm text-gray-600">
+                        Or{' '}
+                        <Link href="/register" className="font-medium text-violet-600 hover:text-violet-700">
+                            Don&apos;t have an account yet? Sign up here.
+                        </Link>
+                    </p>
+                </div>
                 <Box
                 component="form"
                 noValidate
                 autoComplete="off">
 
-                <div className='grid gap-3'>
+                <div className="mt-8 space-y-3">
 
                     <TextField
+                        className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-violet-500 focus:outline-none focus:ring-violet-500 sm:text-sm"
                         id="username-input"
                         label="Username"
                         type="username"
@@ -57,11 +74,16 @@ export default function Login() {
                         type="password"
                         autoComplete="current-password"
                         onChange={(e) => setPassword(e.target.value)}
-
+                        className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-violet-500 focus:outline-none focus:ring-violet-500 sm:text-sm"
                     />
                 </div>
             </Box>
-                <Button variant="outlined" className='w-20' onClick={login}>Login</Button>
+                <button
+                    className="group relative flex w-full justify-center rounded-md border border-transparent bg-violet-600 py-2 px-6 text-sm font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2" 
+                    onClick={login}>
+                        Login
+                </button>
+            </div>
             </div>
         </main>
         </>

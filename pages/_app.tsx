@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Login from './login';
 import Loading from './loading';
+import Register from './register';
 
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -12,10 +13,14 @@ export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
     const [auth, setAuth ] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [register, setRegister] = useState(false);
 
     useEffect(() => {
         setLoading(true);
-        if (router.pathname !== '/login') {
+        if (router.pathname == '/register') {
+            setRegister(true);
+        }
+        if (router.pathname !== '/login' && router.pathname !== '/register') {
             if (!pocketbase.authStore.isValid) {
                 router.push('/login');
             }
@@ -34,6 +39,11 @@ export default function App({ Component, pageProps }: AppProps) {
     if (auth) {
         return (
             <Component {...pageProps} />
+        )
+    }
+    else if (register) {
+        return (
+            <Register />
         )
     }
     else {

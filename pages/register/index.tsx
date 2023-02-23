@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 //import from connects.ts in api folder
 import { registerUser } from '../api/connects'
+import Link from 'next/link'
 
 export default function Register() {
 
@@ -19,6 +20,7 @@ export default function Register() {
       try {
           const user = await registerUser(username, email, password, passwordConfirm, name)
           console.log(user)
+
           router.push('/dashboard')
       }
       catch (error) {
@@ -36,8 +38,23 @@ export default function Register() {
           <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-          <div className='flex flex-col items-center pt-40 gap-5'>
-              <img src='/logo2.svg' alt='logo' width={200} height={200} />
+          <div className='flex flex-col items-center pt-20 gap-5'>
+            <div>
+                <img
+                className="mx-auto h-17 w-auto"
+                src="./logo2.svg"
+                alt="MuscleMates"
+                />
+                <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                Sign in to your account
+                </h2>
+                <p className="mt-2 text-center text-sm text-gray-600">
+                Or{' '}
+                <Link href="/login" className="font-medium text-violet-600 hover:text-violet-700">
+                    Already have an account? Click here to log in. 
+                </Link>
+                </p>
+            </div>
               <Box
               component="form"
               noValidate
@@ -80,12 +97,15 @@ export default function Register() {
                       type="password"
                       autoComplete="current-password"
                       onChange={(e) => setConfirmPassword(e.target.value)}
-
                   />
                   
               </div>
           </Box>
-              <Button variant="outlined" className='w-20' onClick={register}>Register</Button>
+              <button
+                className="group relative flex mb-5 justify-center rounded-md border border-transparent bg-violet-600 py-2 px-4 text-sm font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2" 
+                onClick={register}>
+                    Register
+                </button>
           </div>
       </main>
       </>
