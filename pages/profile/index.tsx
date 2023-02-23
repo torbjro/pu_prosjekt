@@ -1,5 +1,7 @@
 import { pocketbase } from '../api/connects';
 import { Fragment } from 'react'
+import { Router, useRouter } from 'next/router';
+
 
 const userNavigation = [
     { name: 'Profile', href: '#', current: true },
@@ -14,4 +16,13 @@ const Navigation = [
     { name: 'Groups', href: '#', current: false },
   ]
 
-  
+const router = useRouter()
+const RootStack = createStackNavigator<RootStackParamList>();
+
+type RootStackParamList = {
+  Home: undefined;
+  Profile: { sort: 'uploaded exercises' | 'liked exercises' | 'my progress' };
+  Friends: undefined;
+  Weeklyplan: undefined;
+};
+
