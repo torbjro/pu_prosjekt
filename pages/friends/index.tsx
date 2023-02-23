@@ -23,9 +23,11 @@ export default function Friends() {
 
     console.log('friends', friends)
         
-    const handleUnfollow = async (friend: String) => {
+    const handleUnfollow = async (friend: Record) => {
         const oldFriends = pocketbase.authStore.model?.friends;
-        const newFriends = oldFriends?.filter((f: String) => f !== friend)
+        
+
+        const newFriends = oldFriends?.filter((f: Record) => f !== friend)
         console.log(newFriends)
         const newFriend = await pocketbase.collection('users').update(pocketbase.authStore.model!.id, {friends: newFriends})
         location.reload()
