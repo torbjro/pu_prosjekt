@@ -88,6 +88,7 @@ export async function logout() {
 }
 
 export function getUser() {
+    //return pocketbase.authStore.model;
     return pocketbase.authStore.model;
 }
 
@@ -100,6 +101,11 @@ export async function getUserId() {
     }
 }
 
+export function getUserPosts() {
+    pocketbase.autoCancellation(false);
+    return pocketbase.collection('posts').getList(1, 20, { filter: `id = '${currentUser?.posts?.join("' || id = '")}'` });
+}
+
 export async function getName() {
     if (currentUser != null) {
         return currentUser.name;
@@ -109,10 +115,24 @@ export async function getName() {
     }
 }
 
+export async function getPosts() {
+    // henter alle posts
+    pocketbase.autoCancellation(false);
+    const posts = await pocketbase.collection("posts").getFullList();
+    return posts
+}
+
+export interface post_username {
+    name: string;
+}
+export async function getUserById(id: string) {
+    const user = await pocketbase.collection("users").getOne(`${id}`);
+    return user;
+}
 
 export async function getFriends() {
     pocketbase.autoCancellation(false);
-    const friends = await pocketbase.collection('users').getList(1, 20, { filter: `id = '${currentUser?.friends.join("' || id = '")}'` });
+    const friends = await pocketbase.collection('users').getList(1, 20, { filter: `id = '${currentUser?.friends?.join("' || id = '")}'` });
     try {
         // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
         pocketbase.authStore.isValid && await pocketbase.collection('users').authRefresh();
@@ -122,4 +142,21 @@ export async function getFriends() {
     }
 
     return friends;
+}
+
+export async function getProgramById(id: string) {
+    const programs = await pocketbase.collection('programs').getOne(`${id}`);
+    return programs;
+}
+
+export async function getExercisesByPostId(id: string) {
+    // post contains an id to a program, which contains an array of ids to exercises
+    const post = await pocketbase.collection('posts').getOne(`${id}`);
+    const program = await pocketbase.collection('programs').getOne(`${post?.program}`);
+    const exercises = await pocketbase.collection('exercises').getList(1, 20, { filter: `id = '${program?.exercises.join("' || id = '")}'` });
+    return exercises;
+}
+
+export function getUserAvatar() {
+    return currentUser?.avatar;
 }
