@@ -12,10 +12,11 @@
   }
   ```
 */
-import { Fragment } from 'react'
+import React, { Children, FC, Fragment } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { layout } from '@chakra-ui/react'
 
 const user = {
   name: 'Tom Cook',
@@ -24,23 +25,28 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Home', href: '#', current: true },
-  { name: 'Groups', href: '#', current: false },
-  { name: 'Friends', href: '#', current: false },
-  { name: 'Your pictures', href: '#', current: false },
-  { name: 'Profile', href: '#', current: false },
+  { name: 'Dashboard', href: '/dashboard', current: true },
+  { name: 'Groups', href: '/groups', current: false },
+  { name: 'Friends', href: '/friends', current: false },
+  { name: 'Your pictures', href: '/pics', current: false },
+  { name: 'Profile', href: '/profile', current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
+  { name: 'Your Profile', href: '/profile' },
+  { name: 'Settings', href: '/settings' },
   { name: 'Sign out', href: './login' },
 ]
+
+interface LayoutProps {
+  children: React.ReactNode,
+}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Dashboard() {
+const Layout: FC<LayoutProps> = (props) => {
+  const {children} = props;
   return (
     <>
       {/*
@@ -316,7 +322,10 @@ export default function Dashboard() {
                     Section title
                   </h2>
                   <div className="overflow-hidden rounded-lg bg-white shadow">
-                    <div className="p-6">The feed can be shown here</div>
+                    <div className="p-6">
+                      {/* Displaying feed on home-page through children*/}
+                      {children}
+                    </div>
                   </div>
                 </section>
               </div>
@@ -347,3 +356,5 @@ export default function Dashboard() {
     </>
   )
 }
+
+export default Layout;

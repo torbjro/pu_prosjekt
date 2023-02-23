@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Dashboard from './Dashboard';
+import Layout from './Layout';
 
 export default {
   /* 👇 The title prop is optional.
@@ -10,7 +10,7 @@ export default {
   * to learn how to generate automatic titles
   */
   title: 'Dashboard',
-  component: Dashboard,
-} as ComponentMeta<typeof Dashboard>;
+  component: Layout,
+} as ComponentMeta<typeof Layout>;
 
-export const Primary: ComponentStory<typeof Dashboard> = () => <Dashboard />;
+export const Primary: ComponentStory<typeof Layout> = () => <Layout><p>Test</p></Layout>;

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import Login from './login';
 import Loading from './loading';
 import Register from './register';
+import Layout from '@/components/stories/Dashboard/Layout';
 
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -38,7 +39,9 @@ export default function App({ Component, pageProps }: AppProps) {
     }
     if (auth) {
         return (
-            <Component {...pageProps} />
+            <Layout>
+                <Component {...pageProps} />
+            </Layout>
         )
     }
     else if (register) {
