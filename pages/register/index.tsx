@@ -3,7 +3,7 @@ import { Box, Button, TextField } from '@mui/material'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 //import from connects.ts in api folder
-import { registerUser } from '../api/connects'
+import { pocketbase, registerUser } from '../api/connects'
 
 export default function Register() {
 
@@ -90,12 +90,4 @@ export default function Register() {
       </main>
       </>
   )
-}
-export async function getFriends() {
-    pocketbase.autoCancellation(false);
-    const user = pocketbase.authStore.model;
-    const friends = await pocketbase.collection('users').getList(1, 20, {
-        filter: 'users.friends.id == ' + user?.id
-    });
-    return friends;
 }

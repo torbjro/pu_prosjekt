@@ -108,7 +108,6 @@ export async function getName() {
 
 export async function getFriends() {
     pocketbase.autoCancellation(false);
-    pocketbase.authStore.model?.friends;
     const friends = await pocketbase.collection('users').getList(1, 20, { filter: `id = '${currentUser?.friends.join("' || id = '")}'` });
     try {
         // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
