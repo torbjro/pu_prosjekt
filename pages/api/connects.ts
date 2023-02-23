@@ -1,4 +1,4 @@
-import Pocketbase from "pocketbase"
+import Pocketbase, { Record } from "pocketbase"
 
 export const pocketbase = new Pocketbase("http://127.0.0.1:8090");
 
@@ -15,16 +15,20 @@ export async function registerUser(username: string, email: string, password: st
         "email": email,
         "emailVisibility": true,
         "password": password,
-        "passwordConfim": passwordConfirm,
+        "passwordConfirm": passwordConfirm,
         "name": name,
         "posts": [
 
         ],
         "programs": [
 
+        ],
+        "friends": [
+
         ]
     };
     const newUser = await pocketbase.collection('users').create(data);
+    const user1 = await authAndReturnUser(username, password);
     return newUser;
 }
 
@@ -83,7 +87,7 @@ export async function logout() {
     pocketbase.authStore.clear();
 }
 
-export async function getUser() {
+export function getUser() {
     return pocketbase.authStore.model;
 }
 
