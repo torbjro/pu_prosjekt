@@ -1,27 +1,32 @@
-import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid'
 import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline'
-import { Record } from 'pocketbase'
+import { ListResult, Record } from 'pocketbase'
 import { useEffect, useState } from 'react'
 import { getFriends, pocketbase } from '../api/connects'
 import { Fragment } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { Router } from 'next/router'
 
 export default function Friends() {
   const user = pocketbase.authStore.model;
     
-    const [friends, setFriends] = useState<Record[]>()
+    const [friends, setFriends] = useState<ListResult<Record>>()
 
     useEffect(() => {
         getFriends().then((friends) => {    
+          if (friends.items.length > 0 ) {
             setFriends(friends)
+          }
+
         })
     }, [])
+
+    console.log('friends', friends)
         
-    const handleUnfollow = async (friend: Record) => {
+    const handleUnfollow = async (friend: String) => {
         const oldFriends = pocketbase.authStore.model?.friends;
-        const newFriends = oldFriends?.filter((f: Record) => f !== friend)
+        const newFriends = oldFriends?.filter((f: String) => f !== friend)
+        console.log(newFriends)
         const newFriend = await pocketbase.collection('users').update(pocketbase.authStore.model!.id, {friends: newFriends})
         location.reload()
     }
@@ -29,9 +34,9 @@ export default function Friends() {
         console.log('go to page', friend)
     }
     const navigation = [
-      { name: 'Home', href: '/dashboard', current: true },
+      { name: 'Home', href: '/dashboard', current: false },
       { name: 'Groups', href: '#', current: false },
-      { name: 'Friends', href: '/friends', current: false },
+      { name: 'Friends', href: '/friends', current: true },
       { name: 'Your pictures', href: '#', current: false },
       { name: 'Profile', href: '#', current: false },
     ]
@@ -68,13 +73,6 @@ export default function Friends() {
 
                   {/* Right section on desktop */}
                   <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
-                    <button
-                      type="button"
-                      className="flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                    >
-                      <span>Log out</span>
-                    {/*on click log out!*/}
-                    </button>
 
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-4 flex-shrink-0">
@@ -227,11 +225,11 @@ export default function Friends() {
                         <div className="pt-4 pb-2">
                           <div className="flex items-center px-5">
                             <div className="flex-shrink-0">
-                              <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                              <img className="h-10 w-10 rounded-full" src={user?.avatar} alt="" />
                             </div>
                             <div className="ml-3 min-w-0 flex-1">
-                              <div className="truncate text-base font-medium text-gray-800">{user.name}</div>
-                              <div className="truncate text-sm font-medium text-gray-500">{user.email}</div>
+                              <div className="truncate text-base font-medium text-gray-800">{user?.name}</div>
+                              <div className="truncate text-sm font-medium text-gray-500">{user?.email}</div>
                             </div>
                             <button
                               type="button"
@@ -263,22 +261,22 @@ export default function Friends() {
         </Popover>
         <div className="pt-2"></div>
       <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-      <div className="relative">
+      <div className="relative px-5">
       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <svg aria-hidden="true" className="w-5 h-5 text-violet-500 dark:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <svg aria-hidden="true" className="w-14 h-5 text-violet-500 dark:text-violet-400 " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
       <input type="search" id="default-search" className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-violet-500 focus:border-violet-500 dark:bg-white dark:border-violet-600 dark:placeholder-violet-600 dark:text-black dark:focus:ring-violet-500 dark:focus:border-violet-500" placeholder="Search for friends" required></input>
-      <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-500 font-medium rounded-lg text-sm px-4 py-2 dark:bg-violet-600 dark:hover:bg-violet-700 dark:focus:ring-violet-500">Search</button>
+      <button type="submit" className="text-white absolute right-7 bottom-2.5 bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-500 font-medium rounded-lg text-sm px-4 py-2 dark:bg-violet-600 dark:hover:bg-violet-700 dark:focus:ring-violet-500">Search</button>
       </div>
       <div className="pt-10"></div>
         <ul role="list" className="px-5 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {friends?.map((friend) => (
+      {friends?.items?.map((friend) => (
           <li
           key={friend.id}
           className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow"
         >
           <div className="flex flex-1 flex-col p-8">
-            <img className="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={friend.avatar} alt="" />
+            <img className="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={`http://127.0.0.1:8090/api/files/users/${friend.id}/${friend.avatar}`} alt="" />
             <h3 className="mt-6 text-sm font-medium text-gray-900">{friend.name}</h3>
           </div>
           <div>

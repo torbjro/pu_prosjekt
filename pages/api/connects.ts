@@ -108,10 +108,15 @@ export async function getName() {
 
 export async function getFriends() {
     pocketbase.autoCancellation(false);
-    //const user = pocketbase.authStore.model;
-    //const friends = await pocketbase.collection('users').getList(1, 20, {
-    //    filter: 'users.friends.id == ' + user?.id
-    //});
-    const friends = pocketbase.authStore.model?.friends;
+    pocketbase.authStore.model?.friends;
+    const friends = await pocketbase.collection('users').getList(1, 20, { filter: `id = '${currentUser?.friends.join("' || id = '")}'` });
+    try {
+        // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
+        pocketbase.authStore.isValid && await pocketbase.collection('users').authRefresh();
+    } catch (_) {
+        // clear the auth store on failed refresh
+        pocketbase.authStore.clear();
+    }
+
     return friends;
 }
