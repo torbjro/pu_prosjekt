@@ -1,5 +1,5 @@
 import ProfileInfo from "@/components/stories/ProfileInfo/ProfileInfo"
-import { getExercisesByPostId, getUser, getUserPosts } from "../api/connects";
+import { currentUser, getExercisesByPostId, getUser, getUserPosts } from "../api/connects";
 import { Record } from 'pocketbase';
 import { useEffect, useState } from "react";
 import { Exercise, Post2 } from "@/components/stories/Post/Post2";
@@ -30,7 +30,7 @@ export const Profile = () => {
     return (
         <div>
             <ProfileInfo profile_pic_src={`http://127.0.0.1:8090/api/files/users/${user?.id}/${user?.avatar}`} name={user?.name} email={user?.email} />
-            <div className="grid grid-cols-3 gap-4 pt-6">
+            <div className="grid pt-10">
                 {posts?.map((post) => {
                     
                     let exercises: Exercise[] = [];
@@ -47,11 +47,11 @@ export const Profile = () => {
                     console.log('exercises', exercises)
 
                     return (
-                    <div key={post.id}>
+                    <div key={post.id} className="p-5">
                         <Post2 
                             name={user?.name}
                             exercises={exercises}
-                            profile_pic_src={"https://picsum.photos/200"} 
+                            profile_pic_src={`http://127.0.0.1:8090/api/files/users/${currentUser?.id}/${currentUser?.avatar}`} 
                             profile_src={""}                        
                         />
                     </div>

@@ -17,13 +17,15 @@ import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { layout } from '@chakra-ui/react'
-import Router from 'next/router'
+import { currentUser, pocketbase } from '@/pages/api/connects'
+import router from 'next/router'
+
+
 
 const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  name: `${currentUser?.name}`,
+  email: `${currentUser?.email}`,
+  imageUrl: `http://127.0.0.1:8090/api/files/users/${currentUser?.id}/${currentUser?.avatar}`,
 }
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', current: true },
@@ -49,11 +51,15 @@ function classNames(...classes: string[]) {
 const Layout: FC<LayoutProps> = (props) => {
 
   function newProgram() {
-    Router.push('/create_post')
+    router.push('/create_post')
   }
 
   const {children} = props;
 
+    const handleLogout = () => {
+        pocketbase.authStore.clear();
+        router.push('/login');
+    }
   return (
     <>
       {/*
@@ -94,6 +100,7 @@ const Layout: FC<LayoutProps> = (props) => {
                     </button>
                     <button
                       type="button"
+                      onClick={handleLogout}
                       className="flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                     >
                       <span>Log out</span>
