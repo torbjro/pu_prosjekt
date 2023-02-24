@@ -17,6 +17,7 @@ import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { layout } from '@chakra-ui/react'
+import Router from 'next/router'
 
 const user = {
   name: 'Tom Cook',
@@ -46,7 +47,13 @@ function classNames(...classes: string[]) {
 }
 
 const Layout: FC<LayoutProps> = (props) => {
+
+  function newProgram() {
+    Router.push('/create_post')
+  }
+
   const {children} = props;
+
   return (
     <>
       {/*
@@ -77,6 +84,14 @@ const Layout: FC<LayoutProps> = (props) => {
 
                   {/* Right section on desktop */}
                   <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
+                    <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-black shadow-sm hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onClick={() => newProgram()}
+                      >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                        New Program
+                    </button>
                     <button
                       type="button"
                       className="flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
