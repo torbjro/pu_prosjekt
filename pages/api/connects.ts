@@ -140,7 +140,6 @@ export async function getFriends() {
         // clear the auth store on failed refresh
         pocketbase.authStore.clear();
     }
-
     return friends;
 }
 
