@@ -35,23 +35,6 @@ export default function Friends() {
     const goToPage = (friend: Record) => {
         console.log('go to page', friend)
     }
-    const navigation = [
-        { name: 'Home', href: '/dashboard', current: false },
-        { name: 'Groups', href: '#', current: false },
-        { name: 'Friends', href: '/friends', current: true },
-        { name: 'Your pictures', href: '#', current: false },
-        { name: 'Profile', href: '#', current: false },
-    ]
-    const userNavigation = [
-        { name: 'Your Profile', href: '#' },
-        { name: 'Settings', href: '#' },
-        { name: 'Sign out', href: './login' },
-    ]
-
-    function classNames(...classes: string[]) {
-        return classes.filter(Boolean).join(' ')
-    }
-
     return (
 
         <form>
