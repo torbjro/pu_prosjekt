@@ -5,6 +5,10 @@ export default {
   component: Joingroup
 }
 
-export const Default = () => {
-    return <Joingroup></Joingroup>
+export const Following = () => {
+    return <Joingroup following={false} onLeave={() => {}} groupName="Benkærne"></Joingroup>
+}
+
+export const NotFollowing = () => {
+  return <Joingroup following={false} onLeave={() => {}} groupName="Benkærne"></Joingroup>
 }

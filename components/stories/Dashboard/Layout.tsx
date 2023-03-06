@@ -17,7 +17,7 @@ import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { layout } from '@chakra-ui/react'
-import { currentUser, pocketbase } from '@/pages/api/connects'
+// import { currentUser, pocketbase } from '@/pages/api/connects'
 import router from 'next/router'
 
 

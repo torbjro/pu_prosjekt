@@ -1,27 +1,29 @@
+import React from "react"
 import { FC } from "react"
 
-interface JoingroupProps {
-    children?: string
-}
+    
 
-const Joingroup: FC<JoingroupProps> = (props) => {
-    const {children} = props
+const Joingroup: FC = () => {
+    const onLeave = () => {
+        setFollowing(true)
+    }
+    const onJoin = () => {
+        setFollowing(false)
+    }
+    const [following, setFollowing] = React.useState<boolean | undefined>();
+
     return (
 
-        //Joingroup tailwind style, må fjerne forstørrelsesglass ikonet her, men må gjøre det når storybooken min funker igjen
-        <form>   
-    <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Benkegruppen</label>
-    <div className="relative">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <div className="max-w-sm flex justify-between items-center w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{}</h3>
+            {following 
+            ? 
+            <button onClick={onLeave} className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-4 py-2 ">Leave group</button>
+            : 
+            <button onClick={onJoin} className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none font-medium rounded-lg px-4 py-2">Join Group</button>
+            }
         </div>
-        <input type="search" id="search" className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-violet-500 focus:border-violet-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-violet-500 dark:focus:border-violet-500" placeholder="Search" required></input>
-        <button className="bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded">
-  Join group
-</button>
-    </div>
-</form>
     )
 }
 
-export default Joingroup
+export default Joingroup 
