@@ -1,7 +1,15 @@
 import ProfileInfo from './ProfileInfo'
+import { User } from '@/pages/types'
 
 export const generated = () => {
-  return <ProfileInfo profile_pic_src={'https://www.pngall.com/wp-content/uploads/5/Profile-Male-PNG.png'} name={'Even Gaarder'} email={'test.gmail.com'} />
+
+    const user = {
+        id: '1',
+        name: 'John Doe',
+        email: '',
+        avatar: 'avatar.png'
+    } as User
+  return <ProfileInfo user={user}/>
 }
 
 export default { title: 'Profile Info Banner' }
