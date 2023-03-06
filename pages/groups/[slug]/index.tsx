@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { currentUser, getPosts } from "@/pages/api/connects";
 import { deleteGroupById, getGroupById } from "@/pages/api/groupsHelpers";
 import { useEffect, useState } from "react";
-import { Group, Post } from "@/pages/types";
+import { Group, Post } from "@/lib/types";
 import { Post2 } from "@/components/stories/Post/Post2";
 import { Button } from "@chakra-ui/react";
 

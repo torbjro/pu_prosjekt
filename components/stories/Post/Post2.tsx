@@ -1,4 +1,4 @@
-import { Exercise, Post } from '@/pages/types';
+import { Exercise, Post } from '@/lib/types';
 import { Image } from '@chakra-ui/react';
 import React from 'react';
 

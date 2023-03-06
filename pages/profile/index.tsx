@@ -3,7 +3,7 @@ import { currentUser, getExercisesByPostId, getPosts, getUser, getUserPosts } fr
 import { Record } from 'pocketbase';
 import { useEffect, useState } from "react";
 import { Post2 } from "@/components/stories/Post/Post2";
-import { Post, User } from "../types";
+import { Post, User } from "../../lib/types";
 
 
 export const Profile = () => {

@@ -2,7 +2,7 @@ import router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { currentUser } from "../api/connects";
 import { getGroups, joinGroupById, leaveGroupById } from "../api/groupsHelpers";
-import { Group, User } from "../types";
+import { Group, User } from "../../lib/types";
 
 
 const Groups = () => {

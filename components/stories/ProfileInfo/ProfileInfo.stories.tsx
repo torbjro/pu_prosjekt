@@ -1,5 +1,5 @@
 import ProfileInfo from './ProfileInfo'
-import { User } from '@/pages/types'
+import { User } from '@/lib/types'
 
 export const generated = () => {
 

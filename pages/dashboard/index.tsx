@@ -4,7 +4,7 @@ import { Record } from 'pocketbase';
 import Layout from '@/components/stories/Dashboard/Layout';
 import { Post2} from '@/components/stories/Post/Post2';
 import { getUserById } from '../api/connects';
-import { Post } from '../types';
+import { Post } from '../../lib/types';
 import router from 'next/router';
 
 // export loader and log test

@@ -1,5 +1,5 @@
 import { FC, useState } from "react"
-import { User } from "@/pages/types"
+import { User } from "@/lib/types"
 import { Image } from "@chakra-ui/react"
 
 
