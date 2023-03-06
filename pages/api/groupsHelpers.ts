@@ -1,4 +1,4 @@
-import { Group } from '../types';
+import { Group } from '../../lib/types';
 import { pocketbase, currentUser } from './connects'
 
 export async function addUserToGroup(userId: string, groupId: string) {

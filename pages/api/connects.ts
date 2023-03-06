@@ -1,5 +1,5 @@
 import Pocketbase, { Record } from "pocketbase"
-import { Exercise, Group, Post, Program, User } from "../types";
+import { Exercise, Group, Post, Program, User } from "../../lib/types";
 
 export const pocketbase = new Pocketbase("http://127.0.0.1:8090");
 
