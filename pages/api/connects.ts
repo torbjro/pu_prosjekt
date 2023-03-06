@@ -1,4 +1,5 @@
 import Pocketbase, { Record } from "pocketbase"
+import { Exercise, Group, Post, Program, User } from "../types";
 
 export const pocketbase = new Pocketbase("http://127.0.0.1:8090");
 
@@ -115,16 +116,54 @@ export async function getName() {
     }
 }
 
-export async function getPosts() {
-    // henter alle posts
+export async function getPosts(groupId?: string, userId?: string) {
     pocketbase.autoCancellation(false);
-    const posts = await pocketbase.collection("posts").getFullList();
+    let posts: Post[] = [];
+    if (groupId) {
+        const group = await pocketbase.collection('groups').getOne<Group>(`${groupId}`)
+        posts = await pocketbase.collection("posts").getFullList<Post>(undefined, 
+            {filter: `user = '${group.members.join("' || user = '")}'`});
+    }
+    if (userId) {
+        posts = await pocketbase.collection("posts").getFullList<Post>(undefined, { filter: `id = '${userId}'` });
+    }
+    if (!groupId && !userId) {
+        posts = await pocketbase.collection("posts").getFullList<Post>();
+    }
+
+    for (const post of posts) {
+
+        const tempUser = await pocketbase.collection("users").getOne<User>(`${post.user}`)
+
+        const tempProgram = await pocketbase.collection("programs").getOne(`${post.program}`); 
+        
+        const tempExercises = await pocketbase.collection("exercises").getList(1, 100, { filter: `id = '${tempProgram.exercises.join("' || id = '")}'` });
+
+        let tempExerciseList: Exercise[] = [];
+
+        tempExercises.items.forEach(exercise => {
+            const tempExercise = {
+                exercise: exercise.exercise,
+                sets: exercise.sets,
+                reps: exercise.reps,
+            } as Exercise
+            tempExerciseList.push(tempExercise);
+        });
+        const program = {
+            id: tempProgram.id,
+            name: tempProgram.name,
+            user: tempUser,
+            exercises: tempExerciseList,
+        } as Program
+        post.user = tempUser
+        post.program = program
+        post.program.exercises = tempExerciseList
+        console.log(post);
+    }
+
     return posts
 }
 
-export interface post_username {
-    name: string;
-}
 export async function getUserById(id: string) {
     const user = await pocketbase.collection("users").getOne(`${id}`);
     return user;

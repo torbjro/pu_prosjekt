@@ -1,6 +1,7 @@
 import { Input } from '@chakra-ui/react';
 import React from 'react';
 import './post.css';
+import { Exercise } from '@/pages/types';
 
 interface PostProps {
     name: string;
@@ -9,11 +10,6 @@ interface PostProps {
     profile_src: string;
 }
 
-export interface Exercise {
-    navn: string;
-    sets: number;
-    reps: number;
-}
 
 export function Post({exercises, name, profile_src, profile_pic_src}: PostProps) {
     return(
