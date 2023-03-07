@@ -1,58 +1,44 @@
 import ProfileInfo from "@/components/stories/ProfileInfo/ProfileInfo"
-import { currentUser, getExercisesByPostId, getUser, getUserPosts } from "../api/connects";
+import { currentUser, getExercisesByPostId, getPosts, getUser, getUserPosts } from "../api/connects";
 import { Record } from 'pocketbase';
 import { useEffect, useState } from "react";
-import { Exercise, Post2 } from "@/components/stories/Post/Post2";
+import { Post2 } from "@/components/stories/Post/Post2";
+import { Post, User } from "../../lib/types";
+
 
 export const Profile = () => {
 
-    const user = getUser();
-    const [posts, setPosts] = useState<Record[]>();
-    const [PostExercises, setPostExercises] = useState<Map<Record, Record[]>>();
+    const user =
+    {
+        id: currentUser?.id,
+        name: currentUser?.name,
+        email: currentUser?.email,
+        avatar: currentUser?.avatar,
+    } as User
+    const [posts, setPosts] = useState<Post[]>();
 
     useEffect(() => {
-        getUserPosts().then((postsList) => {
-            setPosts(postsList.items);
-            const tempMap = new Map<Record, Record[]>();
-            const exercisesPromises = postsList.items.map((post) => getExercisesByPostId(post.id));
-            Promise.all(exercisesPromises).then((exercisesArrays) => {
-                postsList.items.forEach((post, index) => {
-                    tempMap.set(post, exercisesArrays[index].items);
-                });
-                setPostExercises(tempMap);
-            }
-            );
+        getPosts(
+            undefined,
+            currentUser?.id
+        ).then((postsList) => {
+            setPosts(postsList);
         });
     }, []);
 
-    console.log('user', user)
 
     return (
         <div>
-            <ProfileInfo profile_pic_src={`http://127.0.0.1:8090/api/files/users/${user?.id}/${user?.avatar}`} name={user?.name} email={user?.email} />
+            <ProfileInfo user={user} />
             <div className="grid pt-10">
                 {posts?.map((post) => {
-                    
-                    let exercises: Exercise[] = [];
-                    if (PostExercises?.get(post)) {
-                        exercises = PostExercises.get(post)?.map((exercise) => {
-                            return {
-                                navn: exercise.exercise,
-                                sets: exercise.sets,
-                                reps: exercise.reps,
-                            }
-                        })!;
-                    }
 
-                    console.log('exercises', exercises)
+                    console.log('exercises', post.program.exercises)
 
                     return (
                     <div key={post.id} className="p-5">
                         <Post2 
-                            name={user?.name}
-                            exercises={exercises}
-                            profile_pic_src={`http://127.0.0.1:8090/api/files/users/${currentUser?.id}/${currentUser?.avatar}`} 
-                            profile_src={""}                        
+                            post={post}                 
                         />
                     </div>
                     )
