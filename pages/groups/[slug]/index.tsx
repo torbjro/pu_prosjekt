@@ -44,14 +44,14 @@ const GroupPage = () => {
         <>
             <div className='grid justify-center px-20'>
                 <div
-                className="bg-white shadow-md rounded-lg px-4 py-6 sm:px-6 sm:py-4 lg:px-8 lg:py-6 grid place-items-center gap-2"
+                className="bg-violet-600 shadow-md rounded-lg px-4 py-6 sm:px-6 sm:py-4 lg:px-8 lg:py-6 grid place-items-center gap-2"
                 >
-                    <h2 className="font-bold text-xl text-violet-600">{group?.name}</h2>
-                    <p>{group?.description}</p>
+                    <h2 className="font-bold text-xl text-white">{group?.name}</h2>
+                    <p className="text-white">{group?.description}</p>
                     {currentUser && group?.admins?.includes(currentUser?.id) ? 
                     <Button 
                     onClick={deleteGroup}
-                    className="bg-violet-600 text-white px-4 py-2 rounded-lg"
+                    className="bg-white text-violet-600 px-4 py-2 rounded-lg"
                     >Delete Group</Button>
                     : ""
                     }
