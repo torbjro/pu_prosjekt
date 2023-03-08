@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
             }
         }
         setLoading(false);
-    }, [router.pathname]);
+    }, [router, router.pathname]);
 
     if (loading) {
         return (
