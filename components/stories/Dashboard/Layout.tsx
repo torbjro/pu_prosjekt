@@ -12,14 +12,17 @@
   }
   ```
 */
-import React, { Children, FC, Fragment } from 'react'
+import React, { Children, FC, Fragment, useEffect, useState } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { layout } from '@chakra-ui/react'
 import { currentUser, pocketbase } from '@/pages/api/connects'
 // import { currentUser, pocketbase } from '@/pages/api/connects'
 import router from 'next/router'
+import Streak from '../Streak/Streak'
+import { User } from '@/lib/types'
+import { setSourceMapRange } from 'typescript'
+import Image from 'next/image'
+import MuscleMates from '@/public/logowhite.svg'
 
 
 
@@ -32,7 +35,6 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', current: true },
   { name: 'Groups', href: '/groups', current: false },
   { name: 'Friends', href: '/friends', current: false },
-  { name: 'Your pictures', href: '/pics', current: false },
   { name: 'Profile', href: '/profile', current: false },
 ]
 const userNavigation = [
@@ -51,28 +53,30 @@ function classNames(...classes: string[]) {
 
 const Layout: FC<LayoutProps> = (props) => {
 
+  const [streak, setStreak] = useState(0);
+
   function newProgram() {
     router.push('/create_post')
   }
 
   const {children} = props;
-
-    const handleLogout = () => {
-        pocketbase.authStore.clear();
-        router.push('/login');
+  
+  useEffect(() => {
+    const getUser = async () => {
+      if (currentUser != undefined) {
+        const tempUser = await pocketbase.collection('users').getOne<User>(currentUser?.id, { '$autoCancel': false });
+        console.log(tempUser);
+        console.log(tempUser.streak);
+        setStreak(tempUser.streak);
+      }
     }
+    getUser();
+  }, []);
+
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div className="min-h-full">
-        <Popover as="header" className="bg-violet-600 pb-24">
+        <Popover as="header" className="bg-violet-600 lg:pb-24 lg:px-0 lg:pt-0 pb-28 pt-5 ">
           {({ open }) => (
             <>
               <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -81,32 +85,29 @@ const Layout: FC<LayoutProps> = (props) => {
                   <div className="absolute left-0 flex-shrink-0 lg:static">
                     <a href="#">
                       <span className="sr-only">MuscleMates</span>
-                      <img
-                        className="h-8 w-auto"
-                        src="./logo2.svg"
+                      <Image
+                        className="h-10 w-auto"
+                        src={MuscleMates}
                         alt="MuscleMates"
+                        width={100}
+                        height={100}
                       />
                     </a>
+                  </div>
+                  <div className='flex justify-center'>
+                    <Streak counter={streak}/>
                   </div>
 
                   {/* Right section on desktop */}
                   <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
                     <button type="button" className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-black shadow-sm hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        onClick={() => newProgram()}
-                      >
+                        onClick={() => newProgram()}>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                       </svg>
-                        New Program
+                        New Post
                     </button>
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                    >
-                      <span>Log out</span>
-                    {/*on click log out!*/}
-                    </button>
+                    
 
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-4 flex-shrink-0">
@@ -122,7 +123,7 @@ const Layout: FC<LayoutProps> = (props) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Menu.Items className="absolute -right-2 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Items className="absolute right-10 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           {userNavigation.map((item) => (
                             <Menu.Item key={item.name}>
                               {({ active }) => (
@@ -143,27 +144,6 @@ const Layout: FC<LayoutProps> = (props) => {
                     </Menu>
                   </div>
 
-                  {/* Search */}
-                  <div className="min-w-0 flex-1 px-12 lg:hidden">
-                    <div className="mx-auto w-full max-w-xs">
-                      <label htmlFor="desktop-search" className="sr-only">
-                        Search
-                      </label>
-                      <div className="relative text-white focus-within:text-gray-600">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                          <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
-                        </div>
-                        <input
-                          id="desktop-search"
-                          className="block w-full rounded-md border border-transparent bg-white bg-opacity-20 py-2 pl-10 pr-3 leading-5 text-gray-900 placeholder-white focus:border-transparent focus:bg-opacity-100 focus:placeholder-gray-500 focus:outline-none focus:ring-0 sm:text-sm"
-                          placeholder="Search"
-                          type="search"
-                          name="search"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
                   {/* Menu button */}
                   <div className="absolute right-0 flex-shrink-0 lg:hidden">
                     {/* Mobile menu button */}
@@ -176,6 +156,8 @@ const Layout: FC<LayoutProps> = (props) => {
                       )}
                     </Popover.Button>
                   </div>
+
+                  
                 </div>
                 <div className="hidden border-t border-white border-opacity-20 py-5 lg:block">
                   <div className="grid grid-cols-3 items-center gap-8">
@@ -195,25 +177,6 @@ const Layout: FC<LayoutProps> = (props) => {
                           </a>
                         ))}
                       </nav>
-                    </div>
-                    <div>
-                      <div className="mx-auto w-full max-w-md">
-                        <label htmlFor="mobile-search" className="sr-only">
-                          Search
-                        </label>
-                        <div className="relative text-white focus-within:text-gray-600">
-                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
-                          </div>
-                          <input
-                            id="mobile-search"
-                            className="block w-full rounded-md border border-transparent bg-white bg-opacity-20 py-2 pl-10 pr-3 leading-5 text-gray-900 placeholder-white focus:border-transparent focus:bg-opacity-100 focus:placeholder-gray-500 focus:outline-none focus:ring-0 sm:text-sm"
-                            placeholder="Search"
-                            type="search"
-                            name="search"
-                          />
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -247,13 +210,15 @@ const Layout: FC<LayoutProps> = (props) => {
                       className="absolute inset-x-0 top-0 z-30 mx-auto w-full max-w-3xl origin-top transform p-2 transition"
                     >
                       <div className="divide-y divide-gray-200 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                        <div className="pt-3 pb-2">
+                        <div className="pt-4 pb-2">
                           <div className="flex items-center justify-between px-4">
                             <div>
-                              <img
+                              <Image
                                 className="h-8 w-auto"
                                 src="./logo2.svg"
                                 alt="MuscleMates"
+                                width={100}
+                                height={100}
                               />
                             </div>
                             <div className="-mr-2">
@@ -265,35 +230,35 @@ const Layout: FC<LayoutProps> = (props) => {
                           </div>
                           <div className="mt-3 space-y-1 px-2">
                             <a
-                              href="#"
+                              href={navigation[0].href}
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              <span>Home</span>
+                              <span>{navigation[0].name}</span>
                             </a>
                             <a
-                              href="#"
+                              href={navigation[1].href}
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              <span>Profile</span>
+                              <span>{navigation[1].name}</span>
                             </a>
                             <a
-                              href="#"
+                              href={navigation[2].href}
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              <span>Groups</span>
+                              <span>{navigation[2].name}</span>
                             </a>
                             <a
-                              href="#"
+                              href={navigation[3].href}
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              Your pictures
+                              {navigation[3].name}
                             </a>
-                            <a
-                              href="#"
+                            {/*<a
+                              href={navigation[4].href}
                               className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                             >
-                              Friends
-                            </a>
+                            {navigation[4].name}
+                            </a>*/}
                           </div>
                         </div>
                         <div className="pt-4 pb-2">
@@ -359,8 +324,10 @@ const Layout: FC<LayoutProps> = (props) => {
                   <h2 className="sr-only" id="section-2-title">
                     Section title
                   </h2>
-                  <div className="overflow-hidden rounded-lg bg-white shadow">
-                    <div className="p-6">Display groups or something here</div>
+                  <div className="grid place-items-center">
+                    <img src={`./nike.jpeg`} className="mt-32 mb-16 max-h-38 rounded-lg ml-9 overflow-hidden"/>
+                    <img src={`./powerade.jpg`} className="mb-16 max-h-38 rounded-lg w-full mt-1 ml-9 overflow-hidden"/>
+                    <img src={`./fresh.jpeg`} className="rounded-lg h-max-38 mt-1 ml-9 overflow-hidden"/>
                   </div>
                 </section>
               </div>

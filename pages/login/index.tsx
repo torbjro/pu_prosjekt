@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import { Box, Button, TextField } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 //import from connects.ts in api folder
-import { authAndReturnUser } from '../api/connects'
+import { authAndReturnUser, currentUser, pocketbase } from '../api/connects'
 import Link from 'next/link'
 
 export default function Login() {
@@ -20,12 +20,33 @@ export default function Login() {
             const user = await authAndReturnUser(username, password)
             console.log(user)
             router.push('/dashboard')
+            // update streak if it is more than one day since last login
+        //     const lastLogin = currentUser?.updated?.split(' ')[0];
+        // const lastLoginList = lastLogin?.split('-');
+        // if (lastLoginList != undefined) {
+        //     const lastLoginYear = Number(lastLoginList[0]);
+        //     const lastLoginMonth = Number(lastLoginList[1]);
+        //     const lastLoginDay = Number(lastLoginList[2]);
+        //     const today = new Date();
+        //     const year = today.getUTCFullYear();
+        //     const month = today.getUTCMonth() + 1;
+        //     const day = today.getUTCDate();
+        //     // TODO: check edge cases like change of months etc
+        //     if (lastLoginYear != year) {
+        //         const updated = pocketbase.collection('users').update(currentUser!.id, {streak: 0});
+        //     }
+        //     if (lastLoginMonth != month) {
+        //         const updated = pocketbase.collection('users').update(currentUser!.id, {streak: 0});
+        //     }
+        //     if (lastLoginDay != day - 1 || lastLoginDay != day) {
+        //         const updated = pocketbase.collection('users').update(currentUser!.id, {streak: 0});
+        //     }
+        // }
         }
         catch (error) {
             console.log(error)
         }
     }
-
 
     return (
         <>
