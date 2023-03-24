@@ -4,10 +4,14 @@ import { Image } from "@chakra-ui/react"
 
 
 interface ProfileInfoProps {
-    user: User
+    user: User | undefined;
 }
 
-const ProfileInfo: FC<ProfileInfoProps> = (props) => {
+const ProfileInfo: FC<ProfileInfoProps> = (props: ProfileInfoProps) => {
+    if (!props.user) {
+        return <div></div>
+    }
+    
     const {id, name, email, avatar} = props.user;
     return (
         <div className="grid justify-center text-center items-center">

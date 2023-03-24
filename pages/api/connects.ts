@@ -1,9 +1,14 @@
 import Pocketbase, { Record } from "pocketbase"
-import { Exercise, Group, Post, Program, User } from "../../lib/types";
+import { Exercise, Exercise2, Group, Post, Program, User, ExerciseRef, ExpandedUser, PrExcercises, PR, Picture } from "../../lib/types";
 
 export const pocketbase = new Pocketbase("http://127.0.0.1:8090");
 
 export const currentUser = pocketbase.authStore.model;
+
+export async function getUpdatedUser() {
+    const user = await pocketbase.collection('users').getOne<ExpandedUser>(`${currentUser?.id}`, { expand: "posts,posts.program,posts.program.exercises,posts.program.exercises.exercise_ref" });
+    return user;
+}
 
 export async function authAndReturnUser(username: string, password: string) {
     const user = await pocketbase.collection('users').authWithPassword(username, password);
@@ -118,50 +123,90 @@ export async function getName() {
 
 export async function getPosts(groupId?: string, userId?: string) {
     pocketbase.autoCancellation(false);
-    let posts: Post[] = [];
+
+    let filter = "";
     if (groupId) {
         const group = await pocketbase.collection('groups').getOne<Group>(`${groupId}`)
-        posts = await pocketbase.collection("posts").getFullList<Post>(undefined, 
-            {filter: `user = '${group.members.join("' || user = '")}'`});
+        filter = `user = '${group.members.join("' || user = '")}'`;
     }
     if (userId) {
-        posts = await pocketbase.collection("posts").getFullList<Post>(undefined, { filter: `id = '${userId}'` });
+        filter = `user = '${userId}'`;
     }
     if (!groupId && !userId) {
-        posts = await pocketbase.collection("posts").getFullList<Post>();
+        filter = `user != '${currentUser?.id}'`;
+    }
+    const posts = await pocketbase.collection("posts").getFullList<Post>(20, { expand: "program,program.exercises,user,program.exercises.exercise_ref", filter: `${filter}`, sort: '-created'});
+    const updatedUser = await getUpdatedUser();
+
+    if (groupId) {
+        sortPosts(posts, updatedUser);
+        return posts;
+    }
+    else {
+        return posts;
     }
 
-    for (const post of posts) {
-
-        const tempUser = await pocketbase.collection("users").getOne<User>(`${post.user}`)
-
-        const tempProgram = await pocketbase.collection("programs").getOne(`${post.program}`); 
         
-        const tempExercises = await pocketbase.collection("exercises").getList(1, 100, { filter: `id = '${tempProgram.exercises.join("' || id = '")}'` });
+}
 
-        let tempExerciseList: Exercise[] = [];
+function sortPosts(posts: Post[], user: ExpandedUser) {
+    return posts.sort((a, b) => {
+        
+      // Sort by which post is the most similar to the user's posts' exercises
+      const aExercises = a.expand.program?.expand.exercises?.map(
+        (exercise) => exercise.expand.exercise_ref
+      );
+      const bExercises = b.expand.program?.expand.exercises?.map(
+        (exercise) => exercise.expand.exercise_ref
+      );
+      let aSimilarity = 0;
+      let bSimilarity = 0;
+  
+      for (let i = 0; i < aExercises?.length; i++) {
+        for (let j = 0; j < user.expand.posts.length; j++) {
+          const userExercises = user.expand.posts[j].expand.program?.expand.exercises.map(
+            (exercise) => exercise.expand.exercise_ref
+          );
+          for (let k = 0; k < userExercises?.length; k++) {
+            if (
+              aExercises[i]?.id == userExercises[k]?.id
+            ) {
+                aSimilarity += 4;
+            }
+            if (
+                aExercises[i]?.bodypart == userExercises[k]?.bodypart) {
+                aSimilarity += 2;
+            }
+            if (
+              aExercises[i]?.type == userExercises[k]?.type &&
+              aExercises[i]?.difficulty == userExercises[k]?.difficulty
+            ) {
+              aSimilarity++;
+            }
+          }
+        }
+      }
+      for (let i = 0; i < bExercises?.length; i++) {
+        for (let j = 0; j < user.expand.posts.length; j++) {
+          const userExercises = user.expand.posts[j].expand.program?.expand.exercises.map(
+            (exercise) => exercise.expand.exercise_ref
+          );
+          for (let k = 0; k < userExercises?.length; k++) {
+            if (
+              bExercises[i]?.id == userExercises[k]?.id &&
+              bExercises[i]?.title == userExercises[k]?.title &&
+              bExercises[i]?.bodypart == userExercises[k]?.bodypart &&
+              bExercises[i]?.type == userExercises[k]?.type &&
+              bExercises[i]?.difficulty == userExercises[k]?.difficulty
+            ) {
+              bSimilarity++;
+            }
+          }
+        }
+      }
+      return bSimilarity - aSimilarity;
 
-        tempExercises.items.forEach(exercise => {
-            const tempExercise = {
-                exercise: exercise.exercise,
-                sets: exercise.sets,
-                reps: exercise.reps,
-            } as Exercise
-            tempExerciseList.push(tempExercise);
-        });
-        const program = {
-            id: tempProgram.id,
-            name: tempProgram.name,
-            user: tempUser,
-            exercises: tempExerciseList,
-        } as Program
-        post.user = tempUser
-        post.program = program
-        post.program.exercises = tempExerciseList
-        console.log(post);
-    }
-
-    return posts
+    });
 }
 
 export async function getUserById(id: string) {
@@ -198,3 +243,41 @@ export async function getExercisesByPostId(id: string) {
 export function getUserAvatar() {
     return currentUser?.avatar;
 }
+
+// TODO: currently not working
+export async function addPicture(userId: string, pictureFile: File ) {
+    // const oldPictures = pocketbase.authStore.model?.pictures;
+    // const newPictures = oldPictures + pictureFile;
+
+    const formData = new FormData();
+    formData.append('progressPicture', pictureFile);
+    formData.append('user', userId);
+    //print the key/value pairs
+    await pocketbase.collection('pictures').create(formData);
+}
+
+export async function getPictures() {
+    const pictures = await pocketbase.collection('pictures').getList<Picture>(1, 20, { filter: `user = '${currentUser?.id}'` });
+    return pictures;
+}
+
+
+export async function updateStreak() {
+    const mostRecentPost = await pocketbase.collection('posts').getFirstListItem<Post>(`user = '${currentUser?.id}'`, {sort: '-created'});
+    console.log("Most recent post: ", mostRecentPost);
+    const today = new Date();
+    console.log("Today: ", today);
+    const todayAtMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    console.log("Today at midnight: ", todayAtMidnight);
+    const lastPostDate = new Date(mostRecentPost?.created);
+    console.log("Last post date: ", lastPostDate);
+    const lastPostDateAtMidnight = new Date(lastPostDate.getFullYear(), lastPostDate.getMonth(), lastPostDate.getDate());
+    console.log("Last post date at midnight: ", lastPostDateAtMidnight);
+    const differenceInDays = Math.ceil((todayAtMidnight.getTime() - lastPostDateAtMidnight.getTime()) / (1000 * 3600 * 24));
+    console.log("Difference in days: ", differenceInDays);
+    if (differenceInDays == 1) {
+        await pocketbase.collection('users').update(currentUser?.id!, { streak: currentUser?.streak + 1 });
+        console.log("Streak: ", currentUser?.streak);
+    }
+}
+

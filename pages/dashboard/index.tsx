@@ -12,7 +12,6 @@ import router from 'next/router';
 export const loader = () => console.log('test');
 function Dashboard() {
     const [posts, setPosts] = useState<Post[]>();
-    
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -26,12 +25,11 @@ function Dashboard() {
         }
         fetchPosts();
       }, []);
-      
         
 
   return (
     <>
-        <div className='grid justify-center w-full'>
+        <div className=''>
         <button onClick={() => router.push('/create_post')} className="bg-violet-600 text-white px-4 my-6 w-full h-20 rounded-lg">New Post</button>
             {
                 posts?.map((post) => {

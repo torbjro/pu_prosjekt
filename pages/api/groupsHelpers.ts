@@ -58,6 +58,13 @@ export async function leaveGroupById(groupId: string) {
     await pocketbase.collection('groups').update(groupId, { members: members.filter((member) => member !== currentUser?.id)});
 }
 
+export async function leaveGroupByIdAndUser(groupId: string, userId: string) {
+    pocketbase.autoCancellation(false);
+    const group = await pocketbase.collection('groups').getOne<Group>(`${groupId}`, { '$autoCancel': false });
+    const members = group.members;
+    await pocketbase.collection('groups').update(groupId, { members: members.filter((member) => member !== userId)});
+}
+
 export async function deleteGroupById(groupId: string) {
     await pocketbase.collection('groups').delete(groupId);
 }

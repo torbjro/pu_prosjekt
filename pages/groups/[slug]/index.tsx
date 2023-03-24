@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { currentUser, getPosts } from "@/pages/api/connects";
-import { deleteGroupById, getGroupById } from "@/pages/api/groupsHelpers";
-import { useEffect, useState } from "react";
+import { deleteGroupById, getGroupById, leaveGroupByIdAndUser } from "@/pages/api/groupsHelpers";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Group, Post } from "@/lib/types";
 import { Post2 } from "@/components/stories/Post/Post2";
 import { Button } from "@chakra-ui/react";
@@ -20,7 +20,7 @@ const GroupPage = () => {
                 setPosts(group);
             });
         }
-    }, [slug]);
+    }, [slug, posts]);
 
     useEffect(() => {
         if (slug) {
@@ -38,6 +38,10 @@ const GroupPage = () => {
         deleteGroupById(slug as string);
         console.log('delete group');
         router.push('/groups');
+    }
+
+    const removeUser = (user: string) => {
+        leaveGroupByIdAndUser(group!.id, user)
     }
 
     return (
@@ -63,6 +67,13 @@ const GroupPage = () => {
                                 <Post2
                                     post={post}
                                     />
+                                {currentUser && group?.admins?.includes(currentUser?.id) ? 
+                                    <Button 
+                                    onClick={()=>removeUser(post.user)}
+                                    className="text-violet-600 float-right mr-4 justify-end text-right hover:text-violet-800 text-sm text-decoration-line: underline"
+                                    >Remove User</Button>
+                                : ""
+                                }
                             </div>
                         )
                     })
