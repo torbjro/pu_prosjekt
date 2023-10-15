@@ -37,3 +37,4 @@ next-env.d.ts
 
 pocketbase.exe
 pocketbase
+pb_data/logs.db
